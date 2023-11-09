@@ -1,0 +1,11 @@
+services:
+  ui:
+    build: ./release-manager-ui
+    ports:
+      - "3000:3000"
+  backend:
+    build: ./release-manager-backend
+    ports:
+      - "3001:3001"
+  mongo:
+    image: "mongo:7.0-rc"

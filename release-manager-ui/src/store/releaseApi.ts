@@ -1,0 +1,222 @@
+import axios from "axios";
+import { Release } from "../pages/ReleaseList";
+
+function fetchRelease(): Promise<{ data: Release[] }> {
+  return axios.get(`http://localhost:3001/releases`);
+}
+
+function fetchReleaseMock(): Promise<{ data: Release[] }> {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve({
+        data: [
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "169.0.0",
+            geo: "DE",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Identity Engine",
+            version: "2.3.4",
+            geo: "BY",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Tracking Opt-In",
+            version: "13.0.0",
+            geo: "XX",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "UCP",
+            version: "some-ver-13",
+            geo: "XX",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "SilverSurfer",
+            version: "some-ver-ss-12",
+            geo: "XX",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Pathfinder",
+            version: "pf-some-12",
+            geo: "XX",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Identity Engine",
+            version: "2.3.3",
+            geo: "BY",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "168.13.0",
+            geo: "PL",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Identity Engine",
+            version: "2.3.2",
+            geo: "XX",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "168.12.9",
+            geo: "DE",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Identity Engine",
+            version: "2.3.2",
+            geo: "FR",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "168.12.8",
+            geo: "GB",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "168.12.7",
+            geo: "FR",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "168.12.6",
+            geo: "BR",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "SilverSurfer",
+            version: "some-ver-ss-11",
+            geo: "XX",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Identity Engine",
+            version: "2.2.5",
+            geo: "XX",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "168.12.5",
+            geo: "DE",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Identity Engine",
+            version: "2.2.4",
+            geo: "FR",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "168.12.4",
+            geo: "GB",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "168.12.3",
+            geo: "FR",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "Ad Engine",
+            version: "168.12.2",
+            geo: "BR",
+            publishedBy: "testUser",
+          },
+          {
+            publishedAt: new Date(),
+            publishedAtString: "",
+            platform: "UCP",
+            projectName: "SilverSurfer",
+            version: "some-ver-ss-1",
+            geo: "XX",
+            publishedBy: "testUser",
+          },
+        ],
+      });
+    }, 1000);
+  });
+}
+
+const releaseApi = {
+  fetchRelease,
+  fetchReleaseMock,
+};
+
+export default releaseApi;
