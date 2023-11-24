@@ -16,8 +16,6 @@ export class DBClient {
       console.log("Connected to database");
     });
     this.db = this.conn.db("release-manager");
-
-    // this.fillDatabase();
   }
 
   static async getClient() {
@@ -27,38 +25,4 @@ export class DBClient {
     }
     return this.client;
   }
-
-  // fillDatabase() {
-  //   const platforms = ["UCP", "MetaCritic", "GameSpot", "Fanatical"];
-  //   const projects = ["AdEngine", "Identity Engine", "CMP"];
-  //   const geos = ["US", "UK", "DE", "FR", "ES", "IT", "JP", "XX", "PL"];
-  //   const users = ["John Doe", "Jane Doe", "Foo Bar", "Baz Qux"];
-
-  //   const projectReleaseAmount = 10_000;
-
-  //   const releases = [];
-
-  //   for (let i = 0; i < projectReleaseAmount; i++) {
-  //     const platform = platforms[Math.floor(Math.random() * platforms.length)];
-  //     const project = projects[Math.floor(Math.random() * projects.length)];
-  //     const geo = geos[Math.floor(Math.random() * geos.length)];
-  //     const user = users[Math.floor(Math.random() * users.length)];
-  //     const version = Math.floor(Math.random() * 1000);
-  //     const description = "Lorem ipsum dolor sit amet";
-  //     const publishedAt = new Date(
-  //       Date.now() - Math.floor(Math.random() * 1000 * 60 * 60 * 24 * 365 * 3)
-  //     );
-  //     releases.push({
-  //       platform,
-  //       projectName: project,
-  //       geo,
-  //       publishedBy: user,
-  //       version,
-  //       description,
-  //       publishedAt,
-  //     });
-  //   }
-
-  //   this.db.collection("releases").insertMany(releases);
-  // }
 }
