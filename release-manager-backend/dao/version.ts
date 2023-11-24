@@ -22,4 +22,15 @@ export class Version {
       releases
     );
   }
+
+  fromDTO(versionDTO: VersionDTO): Version {
+    return new Version(
+      versionDTO.projectName,
+      versionDTO.version,
+      versionDTO.createdBy,
+      versionDTO.description,
+      versionDTO.createdAt,
+      uuid()
+    );
+  }
 }
