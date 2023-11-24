@@ -13,7 +13,14 @@ export function NavigationButton({
   styles,
 }: NavigationButtonProps): JSX.Element {
   return (
-    <Button variant="text" fullWidth={true} onClick={onClick} sx={styles}>
+    <Button
+      variant="text"
+      fullWidth={true}
+      onClick={onClick}
+      sx={{
+        ...styles,
+      }}
+    >
       {text}
     </Button>
   );

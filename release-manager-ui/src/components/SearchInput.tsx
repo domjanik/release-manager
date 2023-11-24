@@ -18,6 +18,7 @@ export function SearchInput(props: SearchInputProps): JSX.Element {
       <TextField
         label="Search phrase"
         variant="standard"
+        sx={{ minWidth: "100px" }}
         onChange={(ev: ChangeEvent<HTMLInputElement>) => {
           changedValue(ev.target.value);
         }}

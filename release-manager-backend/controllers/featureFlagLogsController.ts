@@ -14,8 +14,8 @@ router
   .route("/feature-flag-log")
   .get(async (req, res) => {
     try {
-      const releases = await featureFlagService.getFeatureFlagLogs();
-      return res.status(200).send(releases);
+      const featureFlags = await featureFlagService.getFeatureFlagLogs();
+      return res.status(200).send(featureFlags);
     } catch (error) {
       console.error(error);
       return res.status(500).send("Something went wrong");

@@ -3,6 +3,7 @@ import React from "react";
 import { SearchInput } from "./SearchInput";
 import { Spacings } from "../consts";
 import { Select } from "./Select";
+import DatePicker from "./DatePicker";
 
 export type TableFilters = {
   search: string;
@@ -10,6 +11,8 @@ export type TableFilters = {
   projectFilter: string;
   geoFilter: string;
   platformFilter: string;
+  fromDate?: Date;
+  toDate?: Date;
 };
 
 type TableControlsProps = {
@@ -37,7 +40,10 @@ export function TableControls({
   return (
     <Box
       sx={{
-        display: "flex",
+        display: {
+          md: "flex",
+          xs: "none",
+        },
         justifyContent: "space-between",
         paddingY: Spacings.SMALL,
         marginTop: Spacings.SMALL,
@@ -48,6 +54,16 @@ export function TableControls({
         onChange={(search: string) => {
           changedFilters({ search });
         }}
+      />
+      <DatePicker
+        label="From"
+        onChange={(fromDate: Date | null) =>
+          fromDate && changedFilters({ fromDate })
+        }
+      />
+      <DatePicker
+        label="To"
+        onChange={(toDate: Date | null) => toDate && changedFilters({ toDate })}
       />
       <Select
         options={users}

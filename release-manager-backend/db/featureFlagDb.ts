@@ -12,7 +12,6 @@ async function getFeatureFlagLogs(): Promise<FeatureFlagLog[]> {
         res.sampling,
         res.changedBy,
         res.value,
-        res.publishedAt,
         res.createdAt,
         res.id
       );

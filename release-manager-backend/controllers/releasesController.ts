@@ -23,7 +23,7 @@ router
   .post((req, res) => {
     try {
       const release = req.body as ReleaseDTO;
-      releaseService.addRelease(Release.fromDTO(release));
+      releaseService.addRelease(release);
       res.status(200).send("Added a new release");
     } catch (error) {
       console.error(error);

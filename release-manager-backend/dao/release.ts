@@ -1,43 +1,42 @@
 import { v4 as uuid } from "uuid";
 import { ReleaseDTO } from "../dto/releaseDto";
+import { Version } from "./version";
 
 export class Release {
   constructor(
     public platform: string,
-    public projectName: string,
     public geo: string = "XX",
     public publishedBy: string,
-    public version: string,
-    public description: string = "",
     public publishedAt: Date = new Date(),
     public createdAt: Date = new Date(),
-    public id: string = uuid()
-  ) {}
+    public id: string = uuid(),
+    public version: Version
+  ) {
+    console.log("Release created: ", this);
+  }
 
   toDTO(): ReleaseDTO {
+    console.log("Release to DTO: ", this);
     return new ReleaseDTO(
       this.platform,
-      this.projectName,
+      this.version.projectName,
       this.geo,
       this.publishedBy,
-      this.version,
-      this.description,
-      this.publishedAt,
-      this.id
+      this.version.version,
+      this.version.description,
+      this.publishedAt
     );
   }
 
-  static fromDTO(releaseDTO: ReleaseDTO): Release {
+  static fromDTO(releaseDTO: ReleaseDTO, version: Version): Release {
     return new Release(
       releaseDTO.platform,
-      releaseDTO.projectName,
       releaseDTO.geo,
       releaseDTO.publishedBy,
-      releaseDTO.version,
-      releaseDTO.description,
       releaseDTO.publishedAt,
       new Date(),
-      releaseDTO.id
+      uuid(),
+      version
     );
   }
 }

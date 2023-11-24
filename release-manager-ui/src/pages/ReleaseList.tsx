@@ -17,7 +17,7 @@ import {
 } from "../components/ReleaseTableControls";
 import { ReleaseListRow } from "../components/ReleaseListRow";
 
-export interface Column {
+export interface ReleaseListColumn {
   id:
     | "date"
     | "projectName"
@@ -29,10 +29,10 @@ export interface Column {
   label: string;
   minWidth?: number;
   align?: "right" | "center" | "left";
-  format?: (value: number) => string;
+  mobileHidden?: boolean;
 }
 
-const columns: Column[] = [
+const columns: ReleaseListColumn[] = [
   { id: "details", label: "", minWidth: 35, align: "center" },
   {
     id: "date",
@@ -51,18 +51,27 @@ const columns: Column[] = [
     label: "Version",
     minWidth: 150,
     align: "center",
+    mobileHidden: true,
   },
   {
     id: "platform",
     label: "Platform",
     align: "center",
+    mobileHidden: true,
   },
   {
     id: "geo",
     label: "Geo",
     align: "center",
+    mobileHidden: true,
   },
-  { id: "publishedBy", label: "Published By", minWidth: 170, align: "center" },
+  {
+    id: "publishedBy",
+    label: "Published By",
+    minWidth: 170,
+    align: "center",
+    mobileHidden: true,
+  },
 ];
 
 export interface Release {
@@ -127,7 +136,13 @@ export function ReleaseList(): JSX.Element {
                 <TableCell
                   key={column.id}
                   align={column.align}
-                  style={{ minWidth: column.minWidth }}
+                  sx={{
+                    minWidth: column.minWidth,
+                    display: {
+                      md: "table-cell",
+                      xs: column.mobileHidden ? "none" : "table-cell",
+                    },
+                  }}
                 >
                   {column.label}
                 </TableCell>

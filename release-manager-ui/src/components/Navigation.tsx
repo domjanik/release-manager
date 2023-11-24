@@ -19,21 +19,38 @@ export function Navigation(): JSX.Element {
   return (
     <Container
       sx={{
-        height: "100%",
+        height: { md: "100%", xs: "100px" },
+        width: { md: "auto", xs: "100vw" },
+        flexDirection: { md: "column", xs: "row" },
         paddingY: Spacings.MEDIUM,
         background: Colors.PURPLE,
         display: "flex",
-        flexDirection: "column",
+        flex: "1 1 auto",
         justifyContent: "space-between",
       }}
     >
-      <Box>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: { xs: "row", md: "column" },
+          width: "100%",
+          alignItems: "center",
+          justifyContent: "space-around",
+        }}
+      >
         <StyledImage src="Fandom_heart-logo.svg (1).png" alt="logo" />
         <NavigationButton
-          text="Release list"
+          text="Dashboard"
           onClick={() => goTo("/")}
           styles={{
             color: isActive("/") ? Colors.PINK : Colors.WHITE,
+          }}
+        />
+        <NavigationButton
+          text="Release list"
+          onClick={() => goTo("/releases")}
+          styles={{
+            color: isActive("/releases") ? Colors.PINK : Colors.WHITE,
           }}
         />
         <NavigationButton
@@ -50,6 +67,7 @@ export function Navigation(): JSX.Element {
           color: Colors.WHITE,
           textAlign: "center",
           fontFamily: "American Typewriter",
+          display: { md: "initial", xs: "none" },
         }}
       >
         WITH LOVE FROM 🌮

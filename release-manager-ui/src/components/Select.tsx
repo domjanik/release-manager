@@ -38,7 +38,7 @@ export function Select({
         value={project}
         labelId="select-label"
         onChange={(ev) => changedProject(ev.target.value as string)}
-        sx={{ minWidth: "200px" }}
+        sx={{ minWidth: "100px" }}
         {...props}
       >
         <MenuItem value="all">{allOptionLabel}</MenuItem>

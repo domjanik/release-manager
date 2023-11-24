@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import releaseSliceReducer from "./releaseSlice";
-import featureFlagLogSlice from "./featureFlagLogSlice";
+import featureFlagReducer from "./featureFlagSlice";
+import versionSliceReducer from "./versionsSlice";
 
 export const store = configureStore({
   reducer: {
+    version: versionSliceReducer,
     release: releaseSliceReducer,
-    featureFlags: featureFlagLogSlice,
+    featureFlags: featureFlagReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({ serializableCheck: false }),

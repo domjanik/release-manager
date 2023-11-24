@@ -2,6 +2,7 @@ import express, { Express, Request, Response } from "express";
 import dotenv from "dotenv";
 import ReleasesController from "./controllers/releasesController";
 import FeatureFlagLogController from "./controllers/featureFlagLogsController";
+import VersionController from "./controllers/versionController";
 import cors from "cors";
 import bodyParser from "body-parser";
 
@@ -14,6 +15,7 @@ app.use(cors());
 app.use(bodyParser.json());
 
 app.use(ReleasesController);
+app.use(VersionController);
 app.use(FeatureFlagLogController);
 
 app.listen(port, () => {

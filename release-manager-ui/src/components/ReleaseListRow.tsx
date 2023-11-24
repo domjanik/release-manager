@@ -1,13 +1,13 @@
-import { Collapse, IconButton, TableRow } from "@mui/material";
+import { Box, Collapse, IconButton, TableRow } from "@mui/material";
 import React from "react";
-import { Column, Release } from "../pages/ReleaseList";
+import { ReleaseListColumn, Release } from "../pages/ReleaseList";
 import SmallTableCell from "./SmallTableCell";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 type ReleaseListRowProps = {
   row: Release;
-  columns: Column[];
+  columns: ReleaseListColumn[];
 };
 
 export function ReleaseListRow({
@@ -41,7 +41,16 @@ export function ReleaseListRow({
               break;
           }
           return (
-            <SmallTableCell key={column.id} align={column.align}>
+            <SmallTableCell
+              sx={{
+                display: {
+                  md: "table-cell",
+                  xs: column.mobileHidden ? "none" : "table-cell",
+                },
+              }}
+              key={column.id}
+              align={column.align}
+            >
               {value}
             </SmallTableCell>
           );
@@ -51,8 +60,35 @@ export function ReleaseListRow({
         <TableRow>
           <SmallTableCell></SmallTableCell>
           <SmallTableCell colSpan={6}>
-            <div>Release Notes: </div>
-            <div>{row.description || "Not available"}</div>
+            {columns.map((column) => {
+              let value;
+              switch (column.id) {
+                case "details":
+                  value = null;
+                  break;
+                case "date":
+                  value = null;
+                  break;
+                default:
+                  value = row[column.id];
+                  break;
+              }
+              return (
+                <Box
+                  sx={{
+                    display: {
+                      md: "none",
+                      xs: column.mobileHidden ? "flex" : "none",
+                    },
+                  }}
+                  key={column.id}
+                >
+                  {column.label}: {value}
+                </Box>
+              );
+            })}
+            <Box>Release Notes: </Box>
+            <Box>{row.description || "Not available"}</Box>
           </SmallTableCell>
         </TableRow>
       )}
