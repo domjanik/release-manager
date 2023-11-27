@@ -8,14 +8,19 @@ export const fetchVersions = createAsyncThunk(
   "versions/fetchVersions",
   async (_, { dispatch }) => {
     const response = await versionApi.fetchVersions();
-    const responseWithFixedDates = response.data.map((value) => {
-      value.createdAt = new Date(value.createdAt);
-      value.createdAtString =
-        value.createdAt.toLocaleDateString() +
-        ", " +
-        value.createdAt.toLocaleTimeString();
-      return value;
-    });
+    const responseWithFixedDates = response.data
+      .map((value) => {
+        value.createdAt = new Date(value.createdAt);
+        value.createdAtString =
+          value.createdAt.toLocaleDateString() +
+          ", " +
+          value.createdAt.toLocaleTimeString();
+        return value;
+      })
+      .sort(
+        (a: Version, b: Version) =>
+          b.createdAt.getTime() - a.createdAt.getTime()
+      );
 
     const projects: string[] = [],
       users: string[] = [];
