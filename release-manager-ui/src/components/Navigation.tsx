@@ -54,6 +54,13 @@ export function Navigation(): JSX.Element {
           }}
         />
         <NavigationButton
+          text="Version List"
+          onClick={() => goTo("/versions")}
+          styles={{
+            color: isActive("/versions") ? Colors.PINK : Colors.WHITE,
+          }}
+        />
+        <NavigationButton
           text="Feature Flags"
           onClick={() => goTo("/feature-flags")}
           styles={{

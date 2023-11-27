@@ -4,6 +4,7 @@ import App from "./App";
 import { ReleaseList } from "./pages/ReleaseList";
 import { FeatureFlagLogList } from "./pages/FeatureFlagList";
 import { Dashboard } from "./pages/Dashboard";
+import { VersionList } from "./pages/VersionList";
 
 export default createBrowserRouter([
   {
@@ -21,6 +22,10 @@ export default createBrowserRouter([
       {
         path: "/feature-flags",
         element: <FeatureFlagLogList />,
+      },
+      {
+        path: "/versions",
+        element: <VersionList />,
       },
     ],
   },
