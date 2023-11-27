@@ -6,6 +6,7 @@ export default styled("img")({
   padding: Spacings.XLARGE,
 
   "@media screen and (max-width: 600px)": {
+    display: "none",
     height: "100%",
     width: "auto",
     padding: 0,

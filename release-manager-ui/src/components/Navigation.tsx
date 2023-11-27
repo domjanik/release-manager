@@ -47,21 +47,21 @@ export function Navigation(): JSX.Element {
           }}
         />
         <NavigationButton
-          text="Release list"
+          text="Releases"
           onClick={() => goTo("/releases")}
           styles={{
             color: isActive("/releases") ? Colors.PINK : Colors.WHITE,
           }}
         />
         <NavigationButton
-          text="Version List"
+          text="Versions"
           onClick={() => goTo("/versions")}
           styles={{
             color: isActive("/versions") ? Colors.PINK : Colors.WHITE,
           }}
         />
         <NavigationButton
-          text="Feature Flags"
+          text="Features"
           onClick={() => goTo("/feature-flags")}
           styles={{
             color: isActive("/feature-flags") ? Colors.PINK : Colors.WHITE,
