@@ -5,8 +5,8 @@ import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { Version } from "./Versions";
 import { VersionListColumn } from "../pages/VersionList";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 
 type VersionListRowProps = {
   row: Version;
@@ -42,9 +42,9 @@ export function VersionListRow({
             case "isActive":
               value =
                 row.releases.length > 0 ? (
-                  <CheckBoxIcon />
+                  <CheckCircleIcon />
                 ) : (
-                  <CheckBoxOutlineBlankIcon />
+                  <HighlightOffIcon />
                 );
               break;
             default:

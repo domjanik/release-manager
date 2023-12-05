@@ -10,6 +10,7 @@ type CustomSelectProps = {
   options: string[];
   allOptionLabel?: string;
   placeholder?: string;
+  value?: string;
   onChange: (value: string) => void;
 };
 
@@ -17,12 +18,10 @@ export function Select({
   options,
   onChange,
   allOptionLabel,
+  value = "all",
   ...props
 }: CustomSelectProps): JSX.Element {
-  const [project, setProject] = useState<string>("all");
-
-  const changedProject = (value: string) => {
-    setProject(value);
+  const changedValue = (value: string) => {
     onChange(value);
   };
 
@@ -35,9 +34,9 @@ export function Select({
       )}
       <MUISelect
         variant="standard"
-        value={project}
+        value={value}
         labelId="select-label"
-        onChange={(ev) => changedProject(ev.target.value as string)}
+        onChange={(ev) => changedValue(ev.target.value as string)}
         sx={{ minWidth: "100px" }}
         {...props}
       >

@@ -8,7 +8,12 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchVersions, selectors, setFilters } from "../store/versionsSlice";
+import {
+  clearFilters,
+  fetchVersions,
+  selectors,
+  setFilters,
+} from "../store/versionsSlice";
 import { RootState } from "../store";
 import { TableFooter } from "@mui/material";
 import { VersionListRow } from "../components/VersionListRow";
@@ -17,6 +22,7 @@ import {
   TableControls,
   TableFilters,
 } from "../components/VersionTableControls";
+import { useQueryParams } from "../utils/useQueryParams";
 
 export interface VersionListColumn {
   id: "date" | "projectName" | "version" | "createdBy" | "details" | "isActive";
@@ -66,20 +72,39 @@ const columns: VersionListColumn[] = [
 export function VersionList(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
-  const users = useSelector((state: RootState) => state.release.userList);
-  const projects = useSelector((state: RootState) => state.release.projectList);
-  const geos = useSelector((state: RootState) => state.release.geoList);
-  const platforms = useSelector(
-    (state: RootState) => state.release.platformList
-  );
+  const users = useSelector((state: RootState) => state.version.userList);
+  const projects = useSelector((state: RootState) => state.version.projectList);
+  const { getQueryParams, setQueryParams } = useQueryParams();
 
   const dispatch = useDispatch<any>();
   const rows: Version[] = useSelector(selectors.getFilteredVersions);
   const filters: TableFilters = useSelector(selectors.getFilters);
 
+  const setDefaultFilters = () => {
+    const queryParams = getQueryParams() as TableFilters;
+    if (JSON.stringify(queryParams) !== "") {
+      const filters = {
+        ...queryParams,
+        fromDate: queryParams.fromDate ? new Date(queryParams.fromDate) : undefined,
+        toDate: queryParams.toDate ? new Date(queryParams.toDate) : undefined,
+      } as TableFilters;
+      dispatch(setFilters(filters));
+    }
+  };
+
   useEffect(() => {
+    setDefaultFilters();
     dispatch(fetchVersions());
+    return () => {
+        dispatch(clearFilters());
+    }
   }, []);
+
+  useEffect(() => {
+    if (JSON.stringify(filters) !== JSON.stringify(getQueryParams())) {
+      setQueryParams(filters);
+    }
+  }, [filters]);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);
@@ -111,7 +136,6 @@ export function VersionList(): JSX.Element {
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
-                  align={column.align}
                   sx={{
                     minWidth: column.minWidth,
                     display: {

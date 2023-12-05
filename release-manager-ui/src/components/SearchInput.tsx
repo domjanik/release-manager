@@ -4,6 +4,7 @@ import { useDebounce } from "../utils/debounce";
 
 type SearchInputProps = {
   onChange: (value: string) => void;
+  value?: string;
 };
 
 export function SearchInput(props: SearchInputProps): JSX.Element {
@@ -18,6 +19,7 @@ export function SearchInput(props: SearchInputProps): JSX.Element {
       <TextField
         label="Search phrase"
         variant="standard"
+        defaultValue={props.value}
         sx={{ minWidth: "100px" }}
         onChange={(ev: ChangeEvent<HTMLInputElement>) => {
           changedValue(ev.target.value);

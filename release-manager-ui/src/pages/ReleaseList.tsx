@@ -8,7 +8,12 @@ import TableHead from "@mui/material/TableHead";
 import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchReleases, selectors, setFilters } from "../store/releaseSlice";
+import {
+  fetchReleases,
+  selectors,
+  clearFilters,
+  setFilters,
+} from "../store/releaseSlice";
 import { RootState } from "../store";
 import { TableFooter } from "@mui/material";
 import {
@@ -16,6 +21,7 @@ import {
   TableFilters,
 } from "../components/ReleaseTableControls";
 import { ReleaseListRow } from "../components/ReleaseListRow";
+import { useQueryParams } from "../utils/useQueryParams";
 
 export interface ReleaseListColumn {
   id:
@@ -91,6 +97,7 @@ export function ReleaseList(): JSX.Element {
   const users = useSelector((state: RootState) => state.release.userList);
   const projects = useSelector((state: RootState) => state.release.projectList);
   const geos = useSelector((state: RootState) => state.release.geoList);
+  const { getQueryParams, setQueryParams } = useQueryParams();
   const platforms = useSelector(
     (state: RootState) => state.release.platformList
   );
@@ -99,9 +106,33 @@ export function ReleaseList(): JSX.Element {
   const rows: Release[] = useSelector(selectors.getFilteredReleases);
   const filters: TableFilters = useSelector(selectors.getFilters);
 
+  const setDefaultFilters = () => {
+    const queryParams = getQueryParams() as TableFilters;
+    if (JSON.stringify(queryParams) !== "") {
+      const filters = {
+        ...queryParams,
+        fromDate: queryParams.fromDate
+          ? new Date(queryParams.fromDate)
+          : undefined,
+        toDate: queryParams.toDate ? new Date(queryParams.toDate) : undefined,
+      } as TableFilters;
+      dispatch(setFilters(filters));
+    }
+  };
+
   useEffect(() => {
+    setDefaultFilters();
     dispatch(fetchReleases());
+    return () => {
+      dispatch(clearFilters());
+    };
   }, []);
+
+  useEffect(() => {
+    if (JSON.stringify(filters) !== JSON.stringify(getQueryParams())) {
+      setQueryParams(filters);
+    }
+  }, [filters]);
 
   const handleChangePage = (_: unknown, newPage: number) => {
     setPage(newPage);

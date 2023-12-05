@@ -12,8 +12,9 @@ import {
 import { Theme } from "@mui/system";
 import SmallTableCell from "./SmallTableCell";
 import { Release } from "../pages/ReleaseList";
-import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
-import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+
 export interface Version {
   projectName: string;
   version: string;
@@ -103,9 +104,9 @@ export function Versions({ sx, versions }: versionsProps): JSX.Element {
                       return (
                         <SmallTableCell key={column.id} align="center">
                           {version.releases.length > 0 ? (
-                            <CheckBoxIcon />
+                            <CheckCircleIcon />
                           ) : (
-                            <CheckBoxOutlineBlankIcon />
+                            <HighlightOffIcon />
                           )}
                         </SmallTableCell>
                       );

@@ -12,7 +12,7 @@ async function getFeatureFlagLogs(): Promise<FeatureFlagLog[]> {
         res.sampling,
         res.changedBy,
         res.value,
-        res.createdAt,
+        res.changedAt,
         res.id
       );
     }

@@ -51,21 +51,25 @@ export function TableControls({
       }}
     >
       <SearchInput
+        value={filters.search}
         onChange={(search: string) => {
           changedFilters({ search });
         }}
       />
       <DatePicker
+        value={filters.fromDate}
         label="From"
         onChange={(fromDate: Date | null) =>
           fromDate && changedFilters({ fromDate })
         }
       />
       <DatePicker
+        value={filters.toDate}
         label="To"
         onChange={(toDate: Date | null) => toDate && changedFilters({ toDate })}
       />
       <Select
+        value={filters.userFilter}
         options={users}
         allOptionLabel="All Users"
         onChange={(selectedUser: string) => {
@@ -74,6 +78,7 @@ export function TableControls({
         placeholder="User"
       />
       <Select
+        value={filters.projectFilter}
         options={projects}
         allOptionLabel="All Projects"
         onChange={(selectedProject: string) => {
@@ -82,6 +87,7 @@ export function TableControls({
         placeholder="Project"
       />
       <Select
+        value={filters.platformFilter}
         options={platforms}
         allOptionLabel="All Platforms"
         onChange={(selectedPlatform: string) => {
@@ -90,6 +96,7 @@ export function TableControls({
         placeholder="Platform"
       />
       <Select
+        value={filters.geoFilter}
         options={geos}
         allOptionLabel="All Geos"
         onChange={(geo: string) => {

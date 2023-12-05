@@ -90,6 +90,17 @@ export const releaseSlice = createSlice({
     setGeos: (state, action: PayloadAction<string[]>) => {
       state.geoList = action.payload;
     },
+    clearFilters: (state) => {
+      state.filters = {
+        search: "",
+        userFilter: "",
+        projectFilter: "",
+        platformFilter: "",
+        geoFilter: "",
+        fromDate: undefined,
+        toDate: undefined,
+      };
+    },
     setUsers: (state, action: PayloadAction<string[]>) => {
       state.userList = action.payload;
     },
@@ -104,8 +115,14 @@ export const releaseSlice = createSlice({
   },
 });
 
-export const { setFilters, setGeos, setPlatforms, setProjects, setUsers } =
-  releaseSlice.actions;
+export const {
+  setFilters,
+  setGeos,
+  setPlatforms,
+  setProjects,
+  setUsers,
+  clearFilters,
+} = releaseSlice.actions;
 
 const getFilteredReleases = (state: RootState) => {
   const items = state.release.releases;

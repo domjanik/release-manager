@@ -13,14 +13,24 @@ import {
   fetchFeatureFlags,
   selectors,
   setFilters,
+  clearFilters,
 } from "../store/featureFlagSlice";
 import { RootState } from "../store";
 import { TableFooter } from "@mui/material";
 import { TableControls } from "../components/FeatureFlagTableControls";
 import { FeatureFlagListRow } from "../components/FeatureFlagListRow";
+import { useQueryParams } from "../utils/useQueryParams";
 
 export interface FeatureFlagListColumn {
-  id: "date" | "name" | "value" | "platform" | "geo" | "changedBy" | "details";
+  id:
+    | "date"
+    | "name"
+    | "value"
+    | "platform"
+    | "geo"
+    | "changedBy"
+    | "details"
+    | "sampling";
 
   label: string;
   minWidth?: number;
@@ -62,6 +72,12 @@ const columns: FeatureFlagListColumn[] = [
     mobileHidden: true,
   },
   {
+    id: "sampling",
+    label: "Sampling",
+    align: "center",
+    mobileHidden: true,
+  },
+  {
     id: "changedBy",
     label: "Changed By",
     minWidth: 170,
@@ -96,9 +112,34 @@ export function FeatureFlagLogList(): JSX.Element {
   const dispatch = useDispatch<any>();
   const rows: FeatureFlag[] = useSelector(selectors.getFilteredFeatureFlagLogs);
   const filters: TableFilters = useSelector(selectors.getFilters);
+  const { getQueryParams, setQueryParams } = useQueryParams();
+
+  const setDefaultFilters = () => {
+    const queryParams = getQueryParams() as TableFilters;
+    if (JSON.stringify(queryParams) !== "") {
+      const filters = {
+        ...queryParams,
+        fromDate: queryParams.fromDate
+          ? new Date(queryParams.fromDate)
+          : undefined,
+        toDate: queryParams.toDate ? new Date(queryParams.toDate) : undefined,
+      } as TableFilters;
+      dispatch(setFilters(filters));
+    }
+  };
 
   useEffect(() => {
+    if (JSON.stringify(filters) !== JSON.stringify(getQueryParams())) {
+      setQueryParams(filters);
+    }
+  }, [filters]);
+
+  useEffect(() => {
+    setDefaultFilters();
     dispatch(fetchFeatureFlags());
+    return () => {
+      dispatch(clearFilters());
+    };
   }, []);
 
   const handleChangePage = (_: unknown, newPage: number) => {

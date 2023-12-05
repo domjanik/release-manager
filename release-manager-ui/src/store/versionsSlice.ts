@@ -72,6 +72,16 @@ export const versionSlice = createSlice({
     setUsers: (state, action: PayloadAction<string[]>) => {
       state.userList = action.payload;
     },
+    clearFilters: (state) => {
+      console.log("clearing filters");
+      state.filters = {
+        search: "",
+        userFilter: "",
+        projectFilter: "",
+        fromDate: undefined,
+        toDate: undefined,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchVersions.fulfilled, (state, action) => {
@@ -83,7 +93,8 @@ export const versionSlice = createSlice({
   },
 });
 
-export const { setFilters, setProjects, setUsers } = versionSlice.actions;
+export const { setFilters, setProjects, setUsers, clearFilters } =
+  versionSlice.actions;
 
 const getFilteredVersions = (state: RootState) => {
   const items = state.version.versions;
@@ -173,7 +184,7 @@ const applyFilters = (items: Version[], filters: Partial<TableFilters>) => {
 };
 
 const getFilters = (state: RootState) => {
-  return state.release.filters;
+  return state.version.filters;
 };
 
 export default versionSlice.reducer;

@@ -44,14 +44,19 @@ export const fetchFeatureFlags = createAsyncThunk(
   "featureFlags/fetchFeatureFlags",
   async (_, { dispatch }) => {
     const response = await featureFlagApi.fetchFeatureFlag();
-    const responseWithFixedDates = response.data.map((value) => {
-      value.changedAt = new Date(value.changedAt);
-      value.changedAtString =
-        value.changedAt.toLocaleDateString() +
-        ", " +
-        value.changedAt.toLocaleTimeString();
-      return value;
-    });
+    const responseWithFixedDates = response.data
+      .map((value) => {
+        value.changedAt = new Date(value.changedAt);
+        value.changedAtString =
+          value.changedAt.toLocaleDateString() +
+          ", " +
+          value.changedAt.toLocaleTimeString();
+        return value;
+      })
+      .sort(
+        (a: FeatureFlag, b: FeatureFlag) =>
+          b.changedAt.getTime() - a.changedAt.getTime()
+      );
     const platforms: string[] = [],
       projects: string[] = [],
       geos: string[] = [],
@@ -98,6 +103,17 @@ export const featureFlagSlice = createSlice({
     setUsers: (state, action: PayloadAction<string[]>) => {
       state.userList = action.payload;
     },
+    clearFilters: (state) => {
+      state.filters = {
+        search: "",
+        userFilter: "",
+        variableFilter: "",
+        platformFilter: "",
+        geoFilter: "",
+        fromDate: undefined,
+        toDate: undefined,
+      };
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(fetchFeatureFlags.fulfilled, (state, action) => {
@@ -109,8 +125,14 @@ export const featureFlagSlice = createSlice({
   },
 });
 
-export const { setFilters, setGeos, setPlatforms, setVariables, setUsers } =
-  featureFlagSlice.actions;
+export const {
+  setFilters,
+  setGeos,
+  setPlatforms,
+  setVariables,
+  setUsers,
+  clearFilters,
+} = featureFlagSlice.actions;
 
 const getFilteredFeatureFlags = (state: RootState) => {
   const items = state.featureFlags.featureFlags;
