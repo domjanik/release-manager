@@ -90,15 +90,7 @@ export function ActiveReleases({
   const [platform, setPlatform] = useState<string>("UCP");
   const releases = useMemo(() => {
     const addedProjects: string[] = [];
-    console.log("Changed platform to:", platform);
-    console.log("Releases:", allReleases);
     return allReleases.filter((release) => {
-      console.log(
-        "Release:",
-        release,
-        !addedProjects.includes(release.projectName),
-        release.platform === platform
-      );
       if (
         !addedProjects.includes(release.projectName) &&
         release.platform === platform
