@@ -1,22 +1,19 @@
-import { v4 as uuid } from "uuid";
-import { ReleaseDTO } from "../dto/releaseDto";
-import { Version } from "./version";
+import { v4 as uuid } from 'uuid'
+import { ReleaseDTO } from '../dto/releaseDto'
+import { Version } from './version'
 
 export class Release {
   constructor(
     public platform: string,
-    public geo: string = "XX",
+    public geo: string = 'XX',
     public publishedBy: string,
     public publishedAt: Date = new Date(),
     public createdAt: Date = new Date(),
     public id: string = uuid(),
     public version: Version
-  ) {
-    console.log("Release created: ", this);
-  }
+  ) {}
 
   toDTO(): ReleaseDTO {
-    console.log("Release to DTO: ", this);
     return new ReleaseDTO(
       this.platform,
       this.version.projectName,
@@ -25,7 +22,7 @@ export class Release {
       this.version.version,
       this.version.description,
       this.publishedAt
-    );
+    )
   }
 
   static fromDTO(releaseDTO: ReleaseDTO, version: Version): Release {
@@ -37,6 +34,6 @@ export class Release {
       new Date(),
       uuid(),
       version
-    );
+    )
   }
 }

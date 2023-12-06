@@ -7,7 +7,5 @@ export class ReleaseDTO {
     public version: string,
     public description: string,
     public publishedAt: Date
-  ) {
-    console.log("Release DTO created: ", this);
-  }
+  ) {}
 }

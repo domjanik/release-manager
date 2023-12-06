@@ -1,4 +1,4 @@
-import { ReleaseDTO } from "./releaseDto";
+import { ReleaseDTO } from './releaseDto'
 
 export class VersionDTO {
   constructor(

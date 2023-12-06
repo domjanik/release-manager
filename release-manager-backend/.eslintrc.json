@@ -5,8 +5,7 @@
     },
     "extends": [
         "eslint:recommended",
-        "plugin:@typescript-eslint/recommended",
-        "plugin:react/recommended"
+        "plugin:@typescript-eslint/recommended"
     ],
     "ignorePatterns": [
         "node_modules/",
@@ -18,10 +17,9 @@
         "sourceType": "module"
     },
     "plugins": [
-        "@typescript-eslint",
-        "react"
+        "@typescript-eslint"
     ],
     "rules": {
-        "no-case-declarations": "off"
+        "@typescript-eslint/no-explicit-any": "warn"
     }
 }

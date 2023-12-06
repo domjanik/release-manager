@@ -103,7 +103,6 @@ export function LastChanges({
     const changes = [...lastReleases, ...latFeatureFlagChanges]
       .sort((a, b) => b.date.getTime() - a.date.getTime())
       .slice(0, CHANGES_LIMIT);
-    console.log("refresh!", changes);
     return changes;
   }, [allReleases, allFeatureFlags]);
 

@@ -1,34 +1,33 @@
-import express from "express";
-import releaseService from "../services/releaseService";
-import { ReleaseDTO } from "../dto/releaseDto";
-import { Release } from "../dao/release";
+import express from 'express'
+import releaseService from '../services/releaseService'
+import { ReleaseDTO } from '../dto/releaseDto'
 
-const router = express.Router();
+const router = express.Router()
 
 router.use((req, res, next) => {
-  console.log(`[Releases] ${Date.now()}: ${req.method} ${req.url}`);
-  next();
-});
+  console.log(`[Releases] ${Date.now()}: ${req.method} ${req.url}`)
+  next()
+})
 router
-  .route("/releases")
+  .route('/releases')
   .get(async (req, res) => {
     try {
-      const releases = await releaseService.getRelease();
-      return res.status(200).send(releases);
+      const releases = await releaseService.getRelease()
+      return res.status(200).send(releases)
     } catch (error) {
-      console.error(error);
-      return res.status(500).send("Something went wrong");
+      console.error(error)
+      return res.status(500).send('Something went wrong')
     }
   })
   .post((req, res) => {
     try {
-      const release = req.body as ReleaseDTO;
-      releaseService.addRelease(release);
-      res.status(200).send("Added a new release");
+      const release = req.body as ReleaseDTO
+      releaseService.addRelease(release)
+      res.status(200).send('Added a new release')
     } catch (error) {
-      console.error(error);
-      return res.status(500).send("Something went wrong");
+      console.error(error)
+      return res.status(500).send('Something went wrong')
     }
-  });
+  })
 
-export default router;
+export default router
