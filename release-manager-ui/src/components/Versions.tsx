@@ -11,19 +11,9 @@ import {
 } from "@mui/material";
 import { Theme } from "@mui/system";
 import SmallTableCell from "./SmallTableCell";
-import { Release } from "../pages/ReleaseList";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-
-export interface Version {
-  projectName: string;
-  version: string;
-  createdBy: string;
-  description: string;
-  createdAt: Date;
-  createdAtString: string;
-  releases: Release[];
-}
+import { Version } from "../store/version/models";
 
 type versionsProps = {
   versions: Version[];
@@ -71,7 +61,7 @@ export function Versions({ sx, versions }: versionsProps): JSX.Element {
 
   const limitedVersions = useMemo(
     () => versions.slice(0, VERSIONS_LIMIT),
-    [versions]
+    [versions],
   );
 
   return (
@@ -99,7 +89,7 @@ export function Versions({ sx, versions }: versionsProps): JSX.Element {
                   }
                 >
                   {columns.map((column) => {
-                    let value = version[column.id as keyof typeof version];
+                    const value = version[column.id as keyof typeof version];
                     if (column.id === "isActive") {
                       return (
                         <SmallTableCell key={column.id} align="center">

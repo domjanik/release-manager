@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import releaseSliceReducer from "./releaseSlice";
-import featureFlagReducer from "./featureFlagSlice";
-import versionSliceReducer from "./versionsSlice";
+import releaseSliceReducer from "./release/slice";
+import featureFlagReducer from "./featureFlag/slice";
+import versionSliceReducer from "./version/slice";
 
 export const store = configureStore({
   reducer: {

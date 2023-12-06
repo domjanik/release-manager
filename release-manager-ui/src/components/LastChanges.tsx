@@ -1,7 +1,5 @@
 import React, { useMemo } from "react";
 import { WidgetWindow } from "./WidgetWindow";
-import { FeatureFlag } from "../pages/FeatureFlagList";
-import { Release } from "../pages/ReleaseList";
 import {
   SxProps,
   Table,
@@ -13,11 +11,13 @@ import {
   Theme,
 } from "@mui/material";
 import SmallTableCell from "./SmallTableCell";
+import { FeatureFlag } from "../store/featureFlag/models";
+import { Release } from "../store/release/models";
 
 type LastChangesProps = {
   allReleases: Release[];
   allFeatureFlags: FeatureFlag[];
-  sx?: SxProps<Theme>;
+  sx: SxProps<Theme>;
 };
 
 enum ChangeType {
@@ -28,7 +28,7 @@ enum ChangeType {
 export interface LastChangesColumn {
   id: "dateAsString" | "type" | "changedBy" | "name" | "platform" | "geo";
   label: string;
-  align?: "right" | "center" | "left";
+  align: "inherit" | "left" | "center" | "right" | "justify";
 }
 
 const columns: LastChangesColumn[] = [
@@ -98,7 +98,7 @@ export function LastChanges({
               ? JSON.stringify(featureFlag.value).slice(0, 10) + "..."
               : featureFlag.value),
         };
-      }
+      },
     );
     const changes = [...lastReleases, ...latFeatureFlagChanges]
       .sort((a, b) => b.date.getTime() - a.date.getTime())
@@ -130,7 +130,7 @@ export function LastChanges({
                   key={change.name + "_" + index}
                 >
                   {columns.map((column) => {
-                    let value = change[column.id as keyof typeof change];
+                    const value = change[column.id as keyof typeof change];
                     return (
                       <SmallTableCell key={column.id} align={column.align}>
                         {value?.toString()}

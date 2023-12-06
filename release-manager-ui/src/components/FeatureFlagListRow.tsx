@@ -1,9 +1,10 @@
 import React from "react";
-import { FeatureFlagListColumn, FeatureFlag } from "../pages/FeatureFlagList";
+import { FeatureFlagListColumn } from "../pages/FeatureFlagList";
 import { Box, IconButton, TableRow } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import SmallTableCell from "./SmallTableCell";
+import { FeatureFlag } from "../store/featureFlag/models";
 
 type FeatureFlagListRowProps = {
   row: FeatureFlag;
@@ -36,7 +37,7 @@ export function FeatureFlagListRow({
               value = row.changedAtString;
               break;
             case "value":
-              const newValue = JSON.stringify(row.value);
+                const newValue = JSON.stringify(row.value);
               value =
                 newValue.length > 20 ? newValue.slice(0, 20) + "..." : newValue;
               break;

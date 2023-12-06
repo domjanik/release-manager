@@ -4,7 +4,7 @@ import {
   MenuItem,
   Select as MUISelect,
 } from "@mui/material";
-import React, { useState } from "react";
+import React from "react";
 
 type CustomSelectProps = {
   options: string[];

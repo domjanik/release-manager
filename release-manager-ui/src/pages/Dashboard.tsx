@@ -1,23 +1,23 @@
 import { Grid } from "@mui/material";
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
+import { AppDispatch, RootState } from "../store";
 import { ActiveReleases } from "../components/ActiveReleases";
 import { LastChanges } from "../components/LastChanges";
 import { Spacings } from "../consts";
-import { fetchReleases } from "../store/releaseSlice";
-import { fetchFeatureFlags } from "../store/featureFlagSlice";
+import { fetchReleases } from "../store/release/slice";
+import { fetchFeatureFlags } from "../store/featureFlag/slice";
 import { Versions } from "../components/Versions";
-import { fetchVersions } from "../store/versionsSlice";
+import { fetchVersions } from "../store/version/slice";
 
 export function Dashboard(): JSX.Element {
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
   const platforms = useSelector(
-    (state: RootState) => state.release.platformList
+    (state: RootState) => state.release.platformList,
   );
   const releases = useSelector((state: RootState) => state.release.releases);
   const featureFlags = useSelector(
-    (state: RootState) => state.featureFlags.featureFlags
+    (state: RootState) => state.featureFlags.featureFlags,
   );
   const versions = useSelector((state: RootState) => state.version.versions);
 

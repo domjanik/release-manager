@@ -9,17 +9,17 @@ import TablePagination from "@mui/material/TablePagination";
 import TableRow from "@mui/material/TableRow";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  TableFilters,
   fetchFeatureFlags,
   selectors,
   setFilters,
   clearFilters,
-} from "../store/featureFlagSlice";
-import { RootState } from "../store";
+} from "../store/featureFlag/slice";
+import { AppDispatch, RootState } from "../store";
 import { TableFooter } from "@mui/material";
 import { TableControls } from "../components/FeatureFlagTableControls";
 import { FeatureFlagListRow } from "../components/FeatureFlagListRow";
 import { useQueryParams } from "../utils/useQueryParams";
+import { FeatureFlag, TableFilters } from "../store/featureFlag/models";
 
 export interface FeatureFlagListColumn {
   id:
@@ -50,66 +50,49 @@ const columns: FeatureFlagListColumn[] = [
     id: "name",
     label: "Variable",
     minWidth: 170,
-    align: "center",
   },
   {
     id: "value",
     label: "Value",
     minWidth: 150,
-    align: "center",
     mobileHidden: true,
   },
   {
     id: "platform",
     label: "Platform",
-    align: "center",
     mobileHidden: true,
   },
   {
     id: "geo",
     label: "Geo",
-    align: "center",
     mobileHidden: true,
   },
   {
     id: "sampling",
     label: "Sampling",
-    align: "center",
     mobileHidden: true,
   },
   {
     id: "changedBy",
     label: "Changed By",
     minWidth: 170,
-    align: "center",
     mobileHidden: true,
   },
 ];
-
-export interface FeatureFlag {
-  platform: string;
-  value: string | boolean | object | number;
-  name: string;
-  geo: string;
-  sampling: number;
-  changedBy: string;
-  changedAt: Date;
-  changedAtString: string;
-}
 
 export function FeatureFlagLogList(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
   const users = useSelector((state: RootState) => state.featureFlags.userList);
   const variables = useSelector(
-    (state: RootState) => state.featureFlags.variableList
+    (state: RootState) => state.featureFlags.variableList,
   );
   const geos = useSelector((state: RootState) => state.featureFlags.geoList);
   const platforms = useSelector(
-    (state: RootState) => state.featureFlags.platformList
+    (state: RootState) => state.featureFlags.platformList,
   );
 
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
   const rows: FeatureFlag[] = useSelector(selectors.getFilteredFeatureFlagLogs);
   const filters: TableFilters = useSelector(selectors.getFilters);
   const { getQueryParams, setQueryParams } = useQueryParams();
@@ -151,7 +134,7 @@ export function FeatureFlagLogList(): JSX.Element {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -174,7 +157,6 @@ export function FeatureFlagLogList(): JSX.Element {
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
-                  align={column.align}
                   sx={{
                     minWidth: column.minWidth,
                     display: {

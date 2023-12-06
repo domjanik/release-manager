@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from "react";
-import { Release } from "../pages/ReleaseList";
 import { WidgetWindow } from "./WidgetWindow";
 import {
   SxProps,
@@ -13,6 +12,7 @@ import {
 } from "@mui/material";
 import { MenuItem, Select as MUISelect } from "@mui/material";
 import SmallTableCell from "./SmallTableCell";
+import { Release } from "../store/release/models";
 
 type ActiveReleasesProps = {
   allReleases: Release[];
@@ -134,7 +134,7 @@ export function ActiveReleases({
                   }
                 >
                   {columns.map((column) => {
-                    let value = release[column.id as keyof typeof release];
+                    const value = release[column.id as keyof typeof release];
                     return (
                       <SmallTableCell key={column.id} align={column.align}>
                         {value?.toString()}

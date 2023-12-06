@@ -1,9 +1,10 @@
-import { Box, Collapse, IconButton, TableRow } from "@mui/material";
+import { Box, IconButton, TableRow } from "@mui/material";
 import React from "react";
-import { ReleaseListColumn, Release } from "../pages/ReleaseList";
+import { ReleaseListColumn } from "../pages/ReleaseList";
 import SmallTableCell from "./SmallTableCell";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import { Release } from "../store/release/models";
 
 type ReleaseListRowProps = {
   row: Release;

@@ -1,20 +1,10 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import releaseApi from "./releaseApi";
-import { Release } from "../pages/ReleaseList";
-import { RootState } from ".";
-import { TableFilters } from "../components/ReleaseTableControls";
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction, Slice } from "@reduxjs/toolkit";
+import api from "./api";
+import { RootState } from "../index";
+import { Release, ReleaseState, TableFilters } from "./models";
 
-export interface ReleaseList {
-  releases: Release[];
-  filters: TableFilters;
-  platformList: string[];
-  projectList: string[];
-  geoList: string[];
-  userList: string[];
-}
-
-const initialState: ReleaseList = {
+const initialState: ReleaseState = {
   releases: [],
   platformList: [],
   projectList: [],
@@ -30,10 +20,10 @@ const initialState: ReleaseList = {
     toDate: undefined,
   },
 };
-export const fetchReleases = createAsyncThunk(
+export const fetchReleases = createAsyncThunk<Release[]>(
   "release/fetchReleases",
-  async (_, { dispatch }) => {
-    const response = await releaseApi.fetchRelease();
+  async (_, { dispatch }): Promise<Release[]> => {
+    const response = await api.fetchRelease();
     const responseWithFixedDates = response.data
       .map((value) => {
         value.publishedAt = new Date(value.publishedAt);
@@ -45,7 +35,7 @@ export const fetchReleases = createAsyncThunk(
       })
       .sort(
         (a: Release, b: Release) =>
-          b.publishedAt.getTime() - a.publishedAt.getTime()
+          b.publishedAt.getTime() - a.publishedAt.getTime(),
       );
     const platforms: string[] = [],
       projects: string[] = [],
@@ -71,26 +61,26 @@ export const fetchReleases = createAsyncThunk(
     dispatch(setUsers(users));
 
     return responseWithFixedDates;
-  }
+  },
 );
 
-export const releaseSlice = createSlice({
+export const slice: Slice = createSlice({
   name: "release",
   initialState,
   reducers: {
-    setFilters: (state, action: PayloadAction<TableFilters>) => {
+    setFilters: (state: ReleaseState, action: PayloadAction<TableFilters>) => {
       state.filters = action.payload;
     },
-    setPlatforms: (state, action: PayloadAction<string[]>) => {
+    setPlatforms: (state: ReleaseState, action: PayloadAction<string[]>) => {
       state.platformList = action.payload;
     },
-    setProjects: (state, action: PayloadAction<string[]>) => {
+    setProjects: (state: ReleaseState, action: PayloadAction<string[]>) => {
       state.projectList = action.payload;
     },
-    setGeos: (state, action: PayloadAction<string[]>) => {
+    setGeos: (state: ReleaseState, action: PayloadAction<string[]>) => {
       state.geoList = action.payload;
     },
-    clearFilters: (state) => {
+    clearFilters: (state: ReleaseState) => {
       state.filters = {
         search: "",
         userFilter: "",
@@ -101,28 +91,29 @@ export const releaseSlice = createSlice({
         toDate: undefined,
       };
     },
-    setUsers: (state, action: PayloadAction<string[]>) => {
+    setUsers: (state: ReleaseState, action: PayloadAction<string[]>) => {
       state.userList = action.payload;
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchReleases.fulfilled, (state, action) => {
-      state.releases = action.payload;
-    });
-    builder.addCase(fetchReleases.rejected, (state) => {
+    builder.addCase(
+      fetchReleases.fulfilled,
+      (state: ReleaseState, action: PayloadAction<Release[]>) => {
+        state.releases = action.payload;
+      },
+    );
+    builder.addCase(fetchReleases.rejected, (state: ReleaseState) => {
       state.releases = [];
     });
   },
 });
 
-export const {
-  setFilters,
-  setGeos,
-  setPlatforms,
-  setProjects,
-  setUsers,
-  clearFilters,
-} = releaseSlice.actions;
+export const setFilters = createAction<TableFilters>("release/setFilters");
+export const setPlatforms = createAction<string[]>("release/setPlatforms");
+export const setProjects = createAction<string[]>("release/setProjects");
+export const setGeos = createAction<string[]>("release/setGeos");
+export const setUsers = createAction<string[]>("release/setUsers");
+export const clearFilters = createAction("release/clearFilters");
 
 const getFilteredReleases = (state: RootState) => {
   const items = state.release.releases;
@@ -139,7 +130,7 @@ const getFilteredReleases = (state: RootState) => {
         ...prevValue,
         [currValue]: allFilters[currValue as keyof TableFilters],
       };
-    }, {});
+    }, {}) as Partial<TableFilters>;
 
   return applyFilters(items, filters);
 };
@@ -188,7 +179,7 @@ const applyFromDateFilter = (items: Release[], fromDate: Date) => {
     const publishDate = new Date(
       item.publishedAt.getUTCFullYear(),
       item.publishedAt.getUTCMonth(),
-      item.publishedAt.getUTCDate()
+      item.publishedAt.getUTCDate(),
     );
     return publishDate >= fromDate;
   });
@@ -199,7 +190,7 @@ const applyToDateFilter = (items: Release[], toDate: Date) => {
     const publishDate = new Date(
       item.publishedAt.getUTCFullYear(),
       item.publishedAt.getUTCMonth(),
-      item.publishedAt.getUTCDate()
+      item.publishedAt.getUTCDate(),
     );
     return publishDate <= toDate;
   });
@@ -237,4 +228,4 @@ const getFilters = (state: RootState) => {
 
 export const selectors = { getFilteredReleases, getFilters };
 
-export default releaseSlice.reducer;
+export default slice.reducer;

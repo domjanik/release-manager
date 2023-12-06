@@ -13,15 +13,13 @@ import {
   selectors,
   clearFilters,
   setFilters,
-} from "../store/releaseSlice";
-import { RootState } from "../store";
+} from "../store/release/slice";
+import { AppDispatch, RootState } from "../store";
 import { TableFooter } from "@mui/material";
-import {
-  TableControls,
-  TableFilters,
-} from "../components/ReleaseTableControls";
+import { TableControls } from "../components/ReleaseTableControls";
 import { ReleaseListRow } from "../components/ReleaseListRow";
 import { useQueryParams } from "../utils/useQueryParams";
+import { Release, TableFilters } from "../store/release/models";
 
 export interface ReleaseListColumn {
   id:
@@ -80,17 +78,6 @@ const columns: ReleaseListColumn[] = [
   },
 ];
 
-export interface Release {
-  projectName: string;
-  version: string;
-  geo: string;
-  publishedBy: string;
-  platform: string;
-  publishedAt: Date;
-  publishedAtString: string;
-  description?: string;
-}
-
 export function ReleaseList(): JSX.Element {
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
@@ -99,10 +86,10 @@ export function ReleaseList(): JSX.Element {
   const geos = useSelector((state: RootState) => state.release.geoList);
   const { getQueryParams, setQueryParams } = useQueryParams();
   const platforms = useSelector(
-    (state: RootState) => state.release.platformList
+    (state: RootState) => state.release.platformList,
   );
 
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
   const rows: Release[] = useSelector(selectors.getFilteredReleases);
   const filters: TableFilters = useSelector(selectors.getFilters);
 
@@ -143,7 +130,7 @@ export function ReleaseList(): JSX.Element {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);
@@ -166,7 +153,6 @@ export function ReleaseList(): JSX.Element {
               {columns.map((column) => (
                 <TableCell
                   key={column.id}
-                  align={column.align}
                   sx={{
                     minWidth: column.minWidth,
                     display: {

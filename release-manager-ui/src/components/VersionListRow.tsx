@@ -3,10 +3,10 @@ import React from "react";
 import SmallTableCell from "./SmallTableCell";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { Version } from "./Versions";
 import { VersionListColumn } from "../pages/VersionList";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
+import { Version } from "../store/version/models";
 
 type VersionListRowProps = {
   row: Version;

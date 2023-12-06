@@ -1,15 +1,20 @@
-import { PayloadAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import versionApi from "./versionsApi";
-import { Version } from "../components/Versions";
-import { RootState } from ".";
-import { TableFilters } from "../components/VersionTableControls";
+import {
+  PayloadAction,
+  Slice,
+  createAsyncThunk,
+  createSlice,
+  createAction,
+} from "@reduxjs/toolkit";
+import versionApi from "./api";
+import { RootState } from "../index";
+import { TableFilters, Version, VersionState } from "./models";
 
-export const fetchVersions = createAsyncThunk(
+export const fetchVersions = createAsyncThunk<Version[]>(
   "versions/fetchVersions",
-  async (_, { dispatch }) => {
+  async (_, { dispatch }): Promise<Version[]> => {
     const response = await versionApi.fetchVersions();
     const responseWithFixedDates = response.data
-      .map((value) => {
+      .map((value: Version) => {
         value.createdAt = new Date(value.createdAt);
         value.createdAtString =
           value.createdAt.toLocaleDateString() +
@@ -19,7 +24,7 @@ export const fetchVersions = createAsyncThunk(
       })
       .sort(
         (a: Version, b: Version) =>
-          b.createdAt.getTime() - a.createdAt.getTime()
+          b.createdAt.getTime() - a.createdAt.getTime(),
       );
 
     const projects: string[] = [],
@@ -36,17 +41,10 @@ export const fetchVersions = createAsyncThunk(
     dispatch(setUsers(users));
 
     return responseWithFixedDates;
-  }
+  },
 );
 
-export interface VersionList {
-  versions: Version[];
-  filters: TableFilters;
-  projectList: string[];
-  userList: string[];
-}
-
-const initialState: VersionList = {
+const initialState: VersionState = {
   versions: [],
   projectList: [],
   userList: [],
@@ -59,21 +57,20 @@ const initialState: VersionList = {
   },
 };
 
-export const versionSlice = createSlice({
+export const versionSlice: Slice = createSlice({
   name: "version",
   initialState,
   reducers: {
-    setFilters: (state, action: PayloadAction<TableFilters>) => {
+    setFilters: (state: VersionState, action: PayloadAction<TableFilters>) => {
       state.filters = action.payload;
     },
-    setProjects: (state, action: PayloadAction<string[]>) => {
+    setProjects: (state: VersionState, action: PayloadAction<string[]>) => {
       state.projectList = action.payload;
     },
-    setUsers: (state, action: PayloadAction<string[]>) => {
+    setUsers: (state: VersionState, action: PayloadAction<string[]>) => {
       state.userList = action.payload;
     },
-    clearFilters: (state) => {
-      console.log("clearing filters");
+    clearFilters: (state: VersionState) => {
       state.filters = {
         search: "",
         userFilter: "",
@@ -84,17 +81,22 @@ export const versionSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchVersions.fulfilled, (state, action) => {
-      state.versions = action.payload;
-    });
-    builder.addCase(fetchVersions.rejected, (state) => {
+    builder.addCase(
+      fetchVersions.fulfilled,
+      (state: VersionState, action: PayloadAction<Version[]>) => {
+        state.versions = action.payload;
+      },
+    );
+    builder.addCase(fetchVersions.rejected, (state: VersionState) => {
       state.versions = [];
     });
   },
 });
 
-export const { setFilters, setProjects, setUsers, clearFilters } =
-  versionSlice.actions;
+export const clearFilters = createAction("version/clearFilters");
+export const setFilters = createAction<TableFilters>("version/setFilters");
+export const setProjects = createAction<string[]>("version/setProjects");
+export const setUsers = createAction<string[]>("version/setUsers");
 
 const getFilteredVersions = (state: RootState) => {
   const items = state.version.versions;
@@ -111,7 +113,7 @@ const getFilteredVersions = (state: RootState) => {
         ...prevValue,
         [currValue]: allFilters[currValue as keyof TableFilters],
       };
-    }, {});
+    }, {}) as Partial<TableFilters>;
 
   return applyFilters(items, filters);
 };
@@ -146,7 +148,7 @@ const applyFromDateFilter = (items: Version[], fromDate: Date) => {
     const publishDate = new Date(
       item.createdAt.getUTCFullYear(),
       item.createdAt.getUTCMonth(),
-      item.createdAt.getUTCDate()
+      item.createdAt.getUTCDate(),
     );
     return publishDate >= fromDate;
   });
@@ -157,7 +159,7 @@ const applyToDateFilter = (items: Version[], toDate: Date) => {
     const publishDate = new Date(
       item.createdAt.getUTCFullYear(),
       item.createdAt.getUTCMonth(),
-      item.createdAt.getUTCDate()
+      item.createdAt.getUTCDate(),
     );
     return publishDate <= toDate;
   });

@@ -3,8 +3,8 @@ import React from "react";
 import { SearchInput } from "./SearchInput";
 import { Spacings } from "../consts";
 import { Select } from "./Select";
-import { TableFilters } from "../store/featureFlagSlice";
 import DatePicker from "./DatePicker";
+import { TableFilters } from "../store/featureFlag/models";
 
 type TableControlsProps = {
   filters: TableFilters;

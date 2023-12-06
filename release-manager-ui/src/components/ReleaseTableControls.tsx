@@ -4,16 +4,7 @@ import { SearchInput } from "./SearchInput";
 import { Spacings } from "../consts";
 import { Select } from "./Select";
 import DatePicker from "./DatePicker";
-
-export type TableFilters = {
-  search: string;
-  userFilter: string;
-  projectFilter: string;
-  geoFilter: string;
-  platformFilter: string;
-  fromDate?: Date;
-  toDate?: Date;
-};
+import { TableFilters } from "../store/release/models";
 
 type TableControlsProps = {
   filters: TableFilters;

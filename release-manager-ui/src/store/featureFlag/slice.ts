@@ -1,49 +1,13 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import type { PayloadAction } from "@reduxjs/toolkit";
-import featureFlagApi from "./featureFlagApi";
-import { RootState } from ".";
-import { FeatureFlag } from "../pages/FeatureFlagList";
+import { createAction, createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction, Slice } from "@reduxjs/toolkit";
+import api from "./api";
+import { RootState } from "../index";
+import { FeatureFlag, FeatureFlagState, TableFilters } from "./models";
 
-export interface FeatureFlagList {
-  featureFlags: FeatureFlag[];
-  filters: TableFilters;
-  platformList: string[];
-  variableList: string[];
-  geoList: string[];
-  userList: string[];
-}
-
-export type TableFilters = {
-  search: string;
-  userFilter: string;
-  variableFilter: string;
-  geoFilter: string;
-  platformFilter: string;
-  fromDate?: Date;
-  toDate?: Date;
-};
-
-const initialState: FeatureFlagList = {
-  featureFlags: [],
-  platformList: [],
-  variableList: [],
-  geoList: [],
-  userList: [],
-  filters: {
-    search: "",
-    userFilter: "",
-    variableFilter: "",
-    platformFilter: "",
-    geoFilter: "",
-    fromDate: undefined,
-    toDate: undefined,
-  },
-};
-
-export const fetchFeatureFlags = createAsyncThunk(
+export const fetchFeatureFlags = createAsyncThunk<FeatureFlag[]>(
   "featureFlags/fetchFeatureFlags",
-  async (_, { dispatch }) => {
-    const response = await featureFlagApi.fetchFeatureFlag();
+  async (_, { dispatch }): Promise<FeatureFlag[]> => {
+    const response = await api.fetchFeatureFlag();
     const responseWithFixedDates = response.data
       .map((value) => {
         value.changedAt = new Date(value.changedAt);
@@ -55,7 +19,7 @@ export const fetchFeatureFlags = createAsyncThunk(
       })
       .sort(
         (a: FeatureFlag, b: FeatureFlag) =>
-          b.changedAt.getTime() - a.changedAt.getTime()
+          b.changedAt.getTime() - a.changedAt.getTime(),
       );
     const platforms: string[] = [],
       projects: string[] = [],
@@ -81,29 +45,55 @@ export const fetchFeatureFlags = createAsyncThunk(
     dispatch(setUsers(users));
 
     return responseWithFixedDates;
-  }
+  },
 );
 
-export const featureFlagSlice = createSlice({
+const initialState: FeatureFlagState = {
+  featureFlags: [],
+  platformList: [],
+  variableList: [],
+  geoList: [],
+  userList: [],
+  filters: {
+    search: "",
+    userFilter: "",
+    variableFilter: "",
+    platformFilter: "",
+    geoFilter: "",
+    fromDate: undefined,
+    toDate: undefined,
+  },
+};
+
+export const slice: Slice = createSlice({
   name: "featureFlag",
   initialState,
   reducers: {
-    setFilters: (state, action: PayloadAction<TableFilters>) => {
+    setFilters: (
+      state: FeatureFlagState,
+      action: PayloadAction<TableFilters>,
+    ) => {
       state.filters = action.payload;
     },
-    setPlatforms: (state, action: PayloadAction<string[]>) => {
+    setPlatforms: (
+      state: FeatureFlagState,
+      action: PayloadAction<string[]>,
+    ) => {
       state.platformList = action.payload;
     },
-    setVariables: (state, action: PayloadAction<string[]>) => {
+    setVariables: (
+      state: FeatureFlagState,
+      action: PayloadAction<string[]>,
+    ) => {
       state.variableList = action.payload;
     },
-    setGeos: (state, action: PayloadAction<string[]>) => {
+    setGeos: (state: FeatureFlagState, action: PayloadAction<string[]>) => {
       state.geoList = action.payload;
     },
-    setUsers: (state, action: PayloadAction<string[]>) => {
+    setUsers: (state: FeatureFlagState, action: PayloadAction<string[]>) => {
       state.userList = action.payload;
     },
-    clearFilters: (state) => {
+    clearFilters: (state: FeatureFlagState) => {
       state.filters = {
         search: "",
         userFilter: "",
@@ -116,23 +106,24 @@ export const featureFlagSlice = createSlice({
     },
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchFeatureFlags.fulfilled, (state, action) => {
-      state.featureFlags = action.payload;
-    });
-    builder.addCase(fetchFeatureFlags.rejected, (state) => {
+    builder.addCase(
+      fetchFeatureFlags.fulfilled,
+      (state: FeatureFlagState, action: PayloadAction<FeatureFlag[]>) => {
+        state.featureFlags = action.payload;
+      },
+    );
+    builder.addCase(fetchFeatureFlags.rejected, (state: FeatureFlagState) => {
       state.featureFlags = [];
     });
   },
 });
 
-export const {
-  setFilters,
-  setGeos,
-  setPlatforms,
-  setVariables,
-  setUsers,
-  clearFilters,
-} = featureFlagSlice.actions;
+export const setFilters = createAction<TableFilters>("featureFlag/setFilters");
+export const setPlatforms = createAction<string[]>("featureFlag/setPlatforms");
+export const setVariables = createAction<string[]>("featureFlag/setVariables");
+export const setGeos = createAction<string[]>("featureFlag/setGeos");
+export const setUsers = createAction<string[]>("featureFlag/setUsers");
+export const clearFilters = createAction("featureFlag/clearFilters");
 
 const getFilteredFeatureFlags = (state: RootState) => {
   const items = state.featureFlags.featureFlags;
@@ -149,7 +140,7 @@ const getFilteredFeatureFlags = (state: RootState) => {
         ...prevValue,
         [currValue]: allFilters[currValue as keyof TableFilters],
       };
-    }, {});
+    }, {}) as Partial<TableFilters>;
 
   return applyFilters(items, filters);
 };
@@ -171,7 +162,7 @@ const applyFromDateFilter = (items: FeatureFlag[], fromDate: Date) => {
     const changeDate = new Date(
       item.changedAt.getUTCFullYear(),
       item.changedAt.getUTCMonth(),
-      item.changedAt.getUTCDate()
+      item.changedAt.getUTCDate(),
     );
     return changeDate >= fromDate;
   });
@@ -182,7 +173,7 @@ const applyToDateFilter = (items: FeatureFlag[], toDate: Date) => {
     const changeDate = new Date(
       item.changedAt.getUTCFullYear(),
       item.changedAt.getUTCMonth(),
-      item.changedAt.getUTCDate()
+      item.changedAt.getUTCDate(),
     );
     return changeDate <= toDate;
   });
@@ -249,4 +240,4 @@ export const selectors = {
   getFilters,
 };
 
-export default featureFlagSlice.reducer;
+export default slice.reducer;

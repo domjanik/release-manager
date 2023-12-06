@@ -1,5 +1,5 @@
-import { FormControl, InputLabel, TextField } from "@mui/material";
-import React, { ChangeEvent, FormEvent, useState } from "react";
+import { FormControl, TextField } from "@mui/material";
+import React, { ChangeEvent} from "react";
 import { useDebounce } from "../utils/debounce";
 
 type SearchInputProps = {

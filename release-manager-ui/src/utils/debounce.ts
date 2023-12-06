@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+// eslint-disable-next-line @typescript-eslint/ban-types
 export function useDebounce<T>(debouncedMethod: Function) {
   const DEFAULT_DEBOUNCE = 500;
 
@@ -9,7 +10,7 @@ export function useDebounce<T>(debouncedMethod: Function) {
       clearTimeout(timer);
     }
     return setTimer(
-      window.setTimeout(() => debouncedMethod(value), DEFAULT_DEBOUNCE)
+      window.setTimeout(() => debouncedMethod(value), DEFAULT_DEBOUNCE),
     );
   };
 

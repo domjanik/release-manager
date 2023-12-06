@@ -13,16 +13,13 @@ import {
   fetchVersions,
   selectors,
   setFilters,
-} from "../store/versionsSlice";
-import { RootState } from "../store";
+} from "../store/version/slice";
+import { AppDispatch, RootState } from "../store";
 import { TableFooter } from "@mui/material";
 import { VersionListRow } from "../components/VersionListRow";
-import { Version } from "../components/Versions";
-import {
-  TableControls,
-  TableFilters,
-} from "../components/VersionTableControls";
+import { TableControls } from "../components/VersionTableControls";
 import { useQueryParams } from "../utils/useQueryParams";
+import { TableFilters, Version } from "../store/version/models";
 
 export interface VersionListColumn {
   id: "date" | "projectName" | "version" | "createdBy" | "details" | "isActive";
@@ -76,7 +73,7 @@ export function VersionList(): JSX.Element {
   const projects = useSelector((state: RootState) => state.version.projectList);
   const { getQueryParams, setQueryParams } = useQueryParams();
 
-  const dispatch = useDispatch<any>();
+  const dispatch = useDispatch<AppDispatch>();
   const rows: Version[] = useSelector(selectors.getFilteredVersions);
   const filters: TableFilters = useSelector(selectors.getFilters);
 
@@ -85,7 +82,9 @@ export function VersionList(): JSX.Element {
     if (JSON.stringify(queryParams) !== "") {
       const filters = {
         ...queryParams,
-        fromDate: queryParams.fromDate ? new Date(queryParams.fromDate) : undefined,
+        fromDate: queryParams.fromDate
+          ? new Date(queryParams.fromDate)
+          : undefined,
         toDate: queryParams.toDate ? new Date(queryParams.toDate) : undefined,
       } as TableFilters;
       dispatch(setFilters(filters));
@@ -96,8 +95,8 @@ export function VersionList(): JSX.Element {
     setDefaultFilters();
     dispatch(fetchVersions());
     return () => {
-        dispatch(clearFilters());
-    }
+      dispatch(clearFilters());
+    };
   }, []);
 
   useEffect(() => {
@@ -115,7 +114,7 @@ export function VersionList(): JSX.Element {
   };
 
   const handleChangeRowsPerPage = (
-    event: React.ChangeEvent<HTMLInputElement>
+    event: React.ChangeEvent<HTMLInputElement>,
   ) => {
     setRowsPerPage(+event.target.value);
     setPage(0);

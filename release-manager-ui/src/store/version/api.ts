@@ -1,5 +1,5 @@
 import axios from "axios";
-import { Version } from "../components/Versions";
+import { Version } from "./models";
 
 function fetchVersions(): Promise<{ data: Version[] }> {
   return axios.get(`http://localhost:3001/version`);

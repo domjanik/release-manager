@@ -37,7 +37,7 @@ export function useQueryParams() {
       window.history.replaceState(
         {},
         "",
-        `${window.location.pathname}?${params}`
+        `${window.location.pathname}?${params}`,
       );
     }
   };

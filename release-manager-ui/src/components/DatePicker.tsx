@@ -2,7 +2,7 @@ import * as React from "react";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker as MUIDatePicker } from "@mui/x-date-pickers/DatePicker";
-import dayjs, { Dayjs } from "dayjs";
+import dayjs from "dayjs";
 
 type DatePickerProps = {
   label: string;
@@ -15,7 +15,8 @@ export default function DatePicker({
   value,
   onChange,
 }: DatePickerProps): JSX.Element {
-  const [date, setDate] = React.useState<Dayjs | null>(null);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const [date, setDate] = React.useState<any>(null);
 
   React.useEffect(() => {
     if (value) {
@@ -35,7 +36,7 @@ export default function DatePicker({
         dayjs()
           .set("year", newDate.getFullYear())
           .set("month", newDate.getMonth())
-          .set("date", newDate.getDate())
+          .set("date", newDate.getDate()),
       );
     } else {
       setDate(null);
@@ -44,7 +45,7 @@ export default function DatePicker({
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <MUIDatePicker
-        value={date as any}
+        value={date}
         label={label}
         onChange={dateChanged}
         slotProps={{
