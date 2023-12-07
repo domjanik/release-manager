@@ -3,13 +3,14 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
-    "build": "npx tsc",
+    "build": "npx tsc && npm run swagger-autogen",
     "start": "node dist/index.js",
     "start:docker": "node dist/index.js",
     "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
     "prettier:write": "npx prettier . --write",
     "prettier:check": "npx prettier . --check",
-    "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "swagger-autogen": "node ./docs/swagger.js"
   },
   "author": "",
   "license": "ISC",
@@ -23,11 +24,13 @@
     "dotenv-cli": "^7.3.0",
     "express": "^4.18.2",
     "mongoose": "^7.6.3",
+    "swagger-ui-express": "^5.0.0",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.20",
     "@types/node": "^20.8.9",
+    "@types/swagger-ui-express": "^4.1.6",
     "@typescript-eslint/eslint-plugin": "^6.13.2",
     "@typescript-eslint/parser": "^6.13.2",
     "concurrently": "^8.2.2",
@@ -37,6 +40,7 @@
     "eslint-plugin-prettier": "^5.0.1",
     "nodemon": "^3.0.1",
     "prettier": "^3.1.0",
+    "swagger-autogen": "^2.23.7",
     "typescript": "^5.2.2"
   }
 }
