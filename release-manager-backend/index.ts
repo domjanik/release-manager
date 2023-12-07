@@ -6,7 +6,6 @@ import VersionController from './controllers/versionController'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 import swaggerUi from 'swagger-ui-express';
-import swaggerDocument from './docs/swagger.json';
 
 dotenv.config()
 
@@ -16,7 +15,11 @@ const port = process.env.PORT
 app.use(cors())
 app.use(bodyParser.json())
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(undefined, {
+    swaggerOptions: {
+        url: '/swagger.json'
+    }
+}));
 
 app.use(ReleasesController)
 app.use(VersionController)

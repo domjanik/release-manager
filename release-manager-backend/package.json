@@ -6,7 +6,8 @@
     "build": "npx tsc && npm run swagger-autogen",
     "start": "node dist/index.js",
     "start:docker": "node dist/index.js",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
+    "dev": "concurrently \"npx tsc --watch\" \"nodemon -x tsoa spec\"",
+    "swagger": "tsoa spec",
     "prettier:write": "npx prettier . --write",
     "prettier:check": "npx prettier . --check",
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
@@ -25,6 +26,7 @@
     "express": "^4.18.2",
     "mongoose": "^7.6.3",
     "swagger-ui-express": "^5.0.0",
+    "tsoa": "^5.1.1",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
