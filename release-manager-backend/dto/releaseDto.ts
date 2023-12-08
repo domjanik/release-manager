@@ -1,11 +1,12 @@
 export class ReleaseDTO {
   constructor(
-    public platform: string,
-    public projectName: string,
-    public geo: string,
-    public publishedBy: string,
-    public version: string,
-    public description: string,
-    public publishedAt: Date
+    public platform: string = 'MetaCritic',
+    public projectName: string = 'Fandom-Player',
+    public version: string = '1.2.3',
+    public publishedBy: string = '',
+
+    public publishedAt: Date = new Date(),
+    public geo: string | undefined,
+    public description: string | undefined,
   ) {}
 }
