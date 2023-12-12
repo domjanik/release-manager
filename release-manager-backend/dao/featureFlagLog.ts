@@ -17,10 +17,10 @@ export class FeatureFlagLog {
     return new FeatureFlagLogDTO(
       this.platform,
       this.name,
-      this.geo,
-      this.sampling,
       this.changedBy,
       this.value,
+      this.geo,
+      this.sampling,
       this.changedAt,
       this.id
     )
