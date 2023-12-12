@@ -16,7 +16,7 @@ export class Version {
     return new VersionDTO(this.projectName, this.version, this.createdBy, this.description, this.createdAt, releases)
   }
 
-  fromDTO(versionDTO: VersionDTO): Version {
+  static fromDTO(versionDTO: VersionDTO): Version {
     return new Version(
       versionDTO.projectName,
       versionDTO.version,

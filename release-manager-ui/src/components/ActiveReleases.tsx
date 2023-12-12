@@ -88,14 +88,31 @@ export function ActiveReleases({
   sx,
 }: ActiveReleasesProps): JSX.Element {
   const [platform, setPlatform] = useState<string>("UCP");
+  const compareVersions = (next: Release, prev: Release) => {
+    const versionA = prev.version.split(".").map(Number);
+    const versionB = next.version.split(".").map(Number);
+
+    for (let i = 0; i < Math.max(versionA.length, versionB.length); i++) {
+      const numA = versionA[i] || 0;
+      const numB = versionB[i] || 0;
+
+      if (numA < numB) {
+        return -1;
+      } else if (numA > numB) {
+        return 1;
+      }
+    }
+
+    return 0;
+  };
   const releases = useMemo(() => {
     const addedProjects: string[] = [];
-    return allReleases.filter((release) => {
-      if (
-        !addedProjects.includes(release.projectName) &&
-        release.platform === platform
-      ) {
-        addedProjects.push(release.projectName);
+    const tempReleases = [...allReleases];
+    return tempReleases.sort(compareVersions).filter((release) => {
+      const toAdd = release.projectName + "_" + release.geo;
+
+      if (!addedProjects.includes(toAdd) && release.platform === platform) {
+        addedProjects.push(toAdd);
         return true;
       } else {
         return false;

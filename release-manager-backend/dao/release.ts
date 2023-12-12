@@ -17,11 +17,11 @@ export class Release {
     return new ReleaseDTO(
       this.platform,
       this.version.projectName,
-      this.geo,
-      this.publishedBy,
       this.version.version,
-      this.version.description,
-      this.publishedAt
+      this.publishedBy,
+      this.publishedAt,
+      this.geo,
+      this.version.description
     )
   }
 

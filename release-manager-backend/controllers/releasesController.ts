@@ -9,7 +9,7 @@ router.use((req, res, next) => {
   next()
 })
 router
-  .route('/releases')
+  .route('/release')
   .get(async (req, res) => {
     try {
       const releases = await releaseService.getRelease()

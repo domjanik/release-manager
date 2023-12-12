@@ -11,7 +11,7 @@ router.use((req, res, next) => {
   next()
 })
 router
-  .route('/feature-flag-log')
+  .route('/feature-flag')
   .get(async (req, res) => {
     try {
       const featureFlags = await featureFlagService.getFeatureFlagLogs()

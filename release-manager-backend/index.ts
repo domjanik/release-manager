@@ -3,6 +3,7 @@ import dotenv from 'dotenv'
 import ReleasesController from './controllers/releasesController'
 import FeatureFlagLogController from './controllers/featureFlagLogsController'
 import VersionController from './controllers/versionController'
+import BatchController from './controllers/batchController'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 
@@ -14,6 +15,7 @@ const port = process.env.PORT
 app.use(cors())
 app.use(bodyParser.json())
 
+app.use(BatchController)
 app.use(ReleasesController)
 app.use(VersionController)
 app.use(FeatureFlagLogController)
