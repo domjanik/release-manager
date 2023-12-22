@@ -1,119 +1,127 @@
-import { Box, IconButton, TableRow } from "@mui/material";
+import {Box, IconButton, TableRow} from "@mui/material";
 import React from "react";
 import SmallTableCell from "./SmallTableCell";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
-import { VersionListColumn } from "../pages/VersionList";
+import {VersionListColumn} from "../pages/VersionList";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import HighlightOffIcon from "@mui/icons-material/HighlightOff";
-import { Version } from "../store/version/models";
+import {Version} from "../store/version/models";
+import {Colors, Spacings} from "../consts";
 
 type VersionListRowProps = {
-  row: Version;
-  columns: VersionListColumn[];
+    row: Version;
+    columns: VersionListColumn[];
 };
 
 export function VersionListRow({
-  row,
-  columns,
-}: VersionListRowProps): JSX.Element {
-  const [open, setOpen] = React.useState(false);
+                                   row,
+                                   columns,
+                               }: VersionListRowProps): JSX.Element {
+    const [open, setOpen] = React.useState(false);
 
-  return (
-    <React.Fragment>
-      <TableRow hover role="radio" tabIndex={-1}>
-        {columns.map((column) => {
-          let value;
-          switch (column.id) {
-            case "details":
-              value = (
-                <IconButton
-                  aria-label="expand row"
-                  size="small"
-                  onClick={() => setOpen(!open)}
-                >
-                  {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
-                </IconButton>
-              );
-              break;
-            case "date":
-              value = row.createdAtString;
-              break;
-            case "isActive":
-              value =
-                row.releases.length > 0 ? (
-                  <CheckCircleIcon />
-                ) : (
-                  <HighlightOffIcon />
-                );
-              break;
-            default:
-              value = row[column.id];
-              break;
-          }
-          return (
-            <SmallTableCell
-              sx={{
-                display: {
-                  md: "table-cell",
-                  xs: column.mobileHidden ? "none" : "table-cell",
-                },
-              }}
-              key={column.id}
-              align={column.align}
-            >
-              {value}
-            </SmallTableCell>
-          );
-        })}
-      </TableRow>
-      {open && (
-        <TableRow>
-          <SmallTableCell></SmallTableCell>
-          <SmallTableCell colSpan={6}>
-            {columns.map((column) => {
-              let value;
-              switch (column.id) {
-                case "details":
-                  value = null;
-                  break;
-                case "date":
-                  value = null;
-                  break;
-                case "isActive":
-                  value = null;
-                  break;
-                default:
-                  value = row[column.id];
-                  break;
-              }
-              return (
-                <Box
-                  sx={{
-                    display: {
-                      md: "none",
-                      xs: column.mobileHidden ? "flex" : "none",
-                    },
-                  }}
-                  key={column.id}
-                >
-                  {column.label}: {value}
-                </Box>
-              );
-            })}
-            <Box>Active Geos:</Box>
-            <Box sx={{ display: "flex" }}>
-              {row.releases
-                .map((release) => {
-                  return release.geo;
-                })
-                .join(", ")}
-            </Box>
-            <Box>Description: </Box>
-            <Box>{row.description || "Not available"}</Box>
-          </SmallTableCell>
-        </TableRow>
-      )}
-    </React.Fragment>
-  );
+    return (
+        <React.Fragment>
+            <TableRow hover role="radio" tabIndex={-1}>
+                {columns.map((column) => {
+                    let value;
+                    switch (column.id) {
+                        case "details":
+                            value = (
+                                <IconButton
+                                    aria-label="expand row"
+                                    size="small"
+                                    onClick={() => setOpen(!open)}
+                                >
+                                    {open ? <KeyboardArrowUpIcon/> : <KeyboardArrowDownIcon/>}
+                                </IconButton>
+                            );
+                            break;
+                        case "date":
+                            value = row.createdAtString;
+                            break;
+                        case "isActive":
+                            value =
+                                row.releases.length > 0 ? (
+                                    <CheckCircleIcon/>
+                                ) : (
+                                    <HighlightOffIcon/>
+                                );
+                            break;
+                        default:
+                            value = row[column.id];
+                            break;
+                    }
+                    return (
+                        <SmallTableCell
+                            sx={{
+                                display: {
+                                    md: "table-cell",
+                                    xs: column.mobileHidden ? "none" : "table-cell",
+                                },
+                            }}
+                            key={column.id}
+                            align={column.align}
+                        >
+                            {value}
+                        </SmallTableCell>
+                    );
+                })}
+            </TableRow>
+            {open && (
+                <TableRow>
+                    <SmallTableCell></SmallTableCell>
+                    <SmallTableCell colSpan={6}>
+                        {columns.map((column) => {
+                            let value;
+                            switch (column.id) {
+                                case "details":
+                                    value = null;
+                                    break;
+                                case "date":
+                                    value = null;
+                                    break;
+                                case "isActive":
+                                    value = null;
+                                    break;
+                                default:
+                                    value = row[column.id];
+                                    break;
+                            }
+                            return (
+                                <Box
+                                    sx={{
+                                        display: {
+                                            md: "none",
+                                            xs: column.mobileHidden ? "flex" : "none",
+                                        },
+                                    }}
+                                    key={column.id}
+                                >
+                                    {column.label}: {value}
+                                </Box>
+                            );
+                        })}
+                        <Box>Releases:</Box>
+                        <Box sx={{display: "flex", flexDirection: "column", paddingX: Spacings.SMALL}}>
+                            {row.releases
+                                .map((release) => {
+                                    return <Box key={release.platform + "-"
+                                                     + release.geo}> {release.platform} - {release.geo}</Box>;
+                                })
+                            }
+                        </Box>
+                        <Box>Description: </Box>
+                        <Box sx={{
+                            padding: Spacings.SMALL,
+                            margin: Spacings.SMALL,
+                            borderWidth: Spacings.MIN,
+                            borderStyle: "solid",
+                            borderColor: Colors.PURPLE_TEXT
+                        }}>{row.description || "Not available"}</Box>
+                    </SmallTableCell>
+                </TableRow>
+            )}
+        </React.Fragment>
+    );
 }

@@ -1,8 +1,8 @@
-import { VersionDTO } from '../dto/versionDto'
+import {VersionDTO} from '../dto/versionDto'
 import VersionDb from '../db/versionDb'
-import { Version } from '../dao/version'
+import {Version} from '../dao/version'
 import releaseService from './releaseService'
-import { ReleaseDTO } from '../dto/releaseDto'
+import {ReleaseDTO} from '../dto/releaseDto'
 
 async function getVersions(): Promise<VersionDTO[]> {
   const releases = await releaseService.getRelease()
@@ -17,13 +17,12 @@ async function getVersions(): Promise<VersionDTO[]> {
       }
       return acc
     }, [])
-  const versions = (await VersionDb.getVersions()).map((version: Version) => {
-    const releases = lastReleases.filter(
-      (release) => release.projectName === version.projectName && release.version === version.version
-    )
-    return version.toDTO(releases)
+    return (await VersionDb.getVersions()).map((version: Version) => {
+      const releases = lastReleases.filter(
+          (release) => release.projectName === version.projectName && release.version === version.version
+      )
+      return version.toDTO(releases)
   })
-  return versions
 }
 
 async function addVersion(version: Version) {
