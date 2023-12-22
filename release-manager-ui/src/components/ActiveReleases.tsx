@@ -88,36 +88,40 @@ export function ActiveReleases({
   sx,
 }: ActiveReleasesProps): JSX.Element {
   const [platform, setPlatform] = useState<string>("UCP");
-  const compareVersions = (next: Release, prev: Release) => {
-    const versionA = prev.version.split(".").map(Number);
-    const versionB = next.version.split(".").map(Number);
 
-    for (let i = 0; i < Math.max(versionA.length, versionB.length); i++) {
-      const numA = versionA[i] || 0;
-      const numB = versionB[i] || 0;
+  function filterInput(input: Release[], platform: string) {
+    const activeReleases: {[key: string]: Release[]} = {};
+    input
+        .filter((release) => {
+          return !platform || release.platform === platform;
+        })
+        .sort((a: Release, b: Release) => b.publishedAt.getTime() - a.publishedAt.getTime())
+        .forEach((release: Release) => {
+          if (!activeReleases[release.projectName]) {
+            activeReleases[release.projectName] = [];
+          }
 
-      if (numA < numB) {
-        return -1;
-      } else if (numA > numB) {
-        return 1;
-      }
-    }
+          const activeReleasesForProject = activeReleases[release.projectName];
+          if (
+              activeReleasesForProject.filter(
+                  (activeRelease) =>
+                      (activeRelease.geo === "XX" || activeRelease.geo === release.geo) &&
+                      activeRelease.platform === release.platform
+              ).length > 0
+          ) {
+            return;
+          } else {
+            activeReleasesForProject.push(release);
+          }
+        });
 
-    return 0;
-  };
+    return Object.keys(activeReleases)
+        .map((projectName) => activeReleases[projectName])
+        .flat();
+  }
+
   const releases = useMemo(() => {
-    const addedProjects: string[] = [];
-    const tempReleases = [...allReleases];
-    return tempReleases.sort(compareVersions).filter((release) => {
-      const toAdd = release.projectName + "_" + release.geo;
-
-      if (!addedProjects.includes(toAdd) && release.platform === platform) {
-        addedProjects.push(toAdd);
-        return true;
-      } else {
-        return false;
-      }
-    });
+    return filterInput(allReleases, platform);
   }, [platform, allReleases]);
 
   return (
