@@ -89,9 +89,9 @@ export function ActiveReleases({
 }: ActiveReleasesProps): JSX.Element {
   const [platform, setPlatform] = useState<string>("UCP");
 
-  function filterInput(input: Release[], platform: string) {
+  const filterReleases = (releases: Release[], platform: string) => {
     const activeReleases: {[key: string]: Release[]} = {};
-    input
+    releases
         .filter((release) => {
           return !platform || release.platform === platform;
         })
@@ -107,10 +107,8 @@ export function ActiveReleases({
                   (activeRelease) =>
                       (activeRelease.geo === "XX" || activeRelease.geo === release.geo) &&
                       activeRelease.platform === release.platform
-              ).length > 0
+              ).length === 0
           ) {
-            return;
-          } else {
             activeReleasesForProject.push(release);
           }
         });
@@ -121,7 +119,7 @@ export function ActiveReleases({
   }
 
   const releases = useMemo(() => {
-    return filterInput(allReleases, platform);
+    return filterReleases(allReleases, platform);
   }, [platform, allReleases]);
 
   return (
